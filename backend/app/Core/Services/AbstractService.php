@@ -6,7 +6,7 @@ namespace App\Core\Services;
 
 use App\Core\Contracts\ServiceInterface;
 
-abstract class BaseService implements ServiceInterface
+abstract class AbstractService implements ServiceInterface
 {
     //
 }
