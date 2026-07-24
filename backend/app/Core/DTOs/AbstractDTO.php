@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Core\DTOs;
 
-abstract readonly class BaseDTO
+abstract readonly class AbstractDTO
 {
     public function toArray(): array
     {
