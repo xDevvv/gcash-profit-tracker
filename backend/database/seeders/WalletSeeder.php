@@ -2,18 +2,20 @@
 
 declare(strict_types=1);
 
-namespace App\Core\Data;
+namespace Database\Seeders;
 
 use App\Core\Constants\Wallets;
+use App\Models\Wallet;
+use Illuminate\Database\Seeder;
 
-final class DefaultWallets
+class WalletSeeder extends Seeder
 {
     /**
-     * @return array<int, array<string, mixed>>
+     * Run the database seeds.
      */
-    public static function all(): array
+    public function run(): void
     {
-        return [
+        $wallets = [
 
             [
                 'code' => Wallets::GCASH,
@@ -34,9 +36,18 @@ final class DefaultWallets
             ],
 
         ];
-    }
 
-    private function __construct()
-    {
+        foreach ($wallets as $wallet) {
+
+            Wallet::query()->updateOrCreate(
+
+                [
+                    'code' => $wallet['code'],
+                ],
+
+                $wallet
+
+            );
+        }
     }
 }
