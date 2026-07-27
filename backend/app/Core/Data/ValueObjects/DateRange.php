@@ -2,10 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Core\Data;
+namespace App\Core\Data\ValueObjects;
 
 use Carbon\CarbonImmutable;
-
 final readonly class DateRange
 {
     public function __construct(

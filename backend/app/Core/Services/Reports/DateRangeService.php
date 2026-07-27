@@ -4,82 +4,73 @@ declare(strict_types=1);
 
 namespace App\Core\Services\Reports;
 
+use App\Core\Data\ValueObjects\DateRange;
 use Carbon\CarbonImmutable;
 
 final class DateRangeService
 {
     /**
      * Today.
-     *
-     * @return array{start: CarbonImmutable, end: CarbonImmutable}
      */
-    public function today(): array
+    public function today(): DateRange
     {
         $today = CarbonImmutable::today();
 
-        return [
-            'start' => $today->startOfDay(),
-            'end' => $today->endOfDay(),
-        ];
+        return new DateRange(
+            start: $today->startOfDay(),
+            end: $today->endOfDay(),
+        );
     }
 
     /**
      * Current week.
-     *
-     * @return array{start: CarbonImmutable, end: CarbonImmutable}
      */
-    public function thisWeek(): array
+    public function thisWeek(): DateRange
     {
         $today = CarbonImmutable::today();
 
-        return [
-            'start' => $today->startOfWeek(),
-            'end' => $today->endOfWeek(),
-        ];
+        return new DateRange(
+            start: $today->startOfWeek(),
+            end: $today->endOfWeek(),
+        );
     }
 
     /**
      * Current month.
-     *
-     * @return array{start: CarbonImmutable, end: CarbonImmutable}
      */
-    public function thisMonth(): array
+    public function thisMonth(): DateRange
     {
         $today = CarbonImmutable::today();
 
-        return [
-            'start' => $today->startOfMonth(),
-            'end' => $today->endOfMonth(),
-        ];
+        return new DateRange(
+            start: $today->startOfMonth(),
+            end: $today->endOfMonth(),
+        );
     }
 
     /**
      * Current year.
-     *
-     * @return array{start: CarbonImmutable, end: CarbonImmutable}
      */
-    public function thisYear(): array
+    public function thisYear(): DateRange
     {
         $today = CarbonImmutable::today();
 
-        return [
-            'start' => $today->startOfYear(),
-            'end' => $today->endOfYear(),
-        ];
+        return new DateRange(
+            start: $today->startOfYear(),
+            end: $today->endOfYear(),
+        );
     }
 
     /**
      * Custom date range.
-     *
-     * @return array{start: CarbonImmutable, end: CarbonImmutable}
      */
     public function custom(
         CarbonImmutable $start,
         CarbonImmutable $end,
-    ): array {
-        return [
-            'start' => $start->startOfDay(),
-            'end' => $end->endOfDay(),
-        ];
+    ): DateRange {
+        return new DateRange(
+            start: $start->startOfDay(),
+            end: $end->endOfDay(),
+        );
     }
 }

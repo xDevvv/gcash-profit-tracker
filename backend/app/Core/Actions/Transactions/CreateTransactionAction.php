@@ -33,7 +33,10 @@ final readonly class CreateTransactionAction
 
             $referenceNumber = $this->referenceGenerator->generate();
 
-            $fee = $this->feeCalculator->calculate($data->amount);
+            $fee = $this->feeCalculator->calculate( new FeeCalculationData(
+                walletId: $data->walletId,
+                amount: $data->amount,
+            ));
 
             $transaction = $this->transactionCreator->create(
                 data: $data,

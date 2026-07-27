@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Core\Services;
+namespace App\Core\Services\Transactions;
 
 use App\Models\Transaction;
 
