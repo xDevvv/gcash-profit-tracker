@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Core\Exceptions;
+namespace App\Core\Exceptions\Finance;
 
-final class InvalidFeeRuleException extends BusinessException
+final class InvalidFeeRulesException extends BusinessException
 {
     public static function make(): self
     {

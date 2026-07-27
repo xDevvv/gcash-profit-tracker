@@ -7,7 +7,7 @@ namespace App\Core\Resources;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-abstract class AbstractResource extends JsonResource
+abstract class AbstractResources extends JsonResource
 {
     /**
      * @return array<string, mixed>

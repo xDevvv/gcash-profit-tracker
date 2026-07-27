@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Core\Helpers;
+namespace App\Core\Support;
 
 use Carbon\Carbon;
 

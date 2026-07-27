@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Core\Data\ValueObjects;
 
-use App\Core\Enums\Transaction\TransactionType;
+use App\Core\Enums\TransactionType;
 
 final readonly class CreateTransactionData
 {

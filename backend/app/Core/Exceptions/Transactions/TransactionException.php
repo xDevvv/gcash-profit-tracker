@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Core\Exceptions;
+namespace App\Core\Exceptions\Transactions;
 
 final class TransactionException extends BusinessException
 {

@@ -6,7 +6,7 @@ namespace App\Core\Resources;
 
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
-final readonly class PaginatedResource
+final readonly class PaginatedResources
 {
     public function __construct(
         private LengthAwarePaginator $paginator,

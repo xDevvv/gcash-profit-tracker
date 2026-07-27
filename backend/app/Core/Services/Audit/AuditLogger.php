@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Core\Services;
+namespace App\Core\Services\Audit;
 
 use App\Models\AuditLog;
 use App\Models\User;
