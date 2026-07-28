@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Models;
 
 use Carbon\CarbonInterface;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 use App\Core\Enums\TransactionStatus;
 use App\Core\Enums\TransactionType;
@@ -14,6 +15,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Transaction extends BaseModel
 {
+    use SoftDeletes;
     use HasFactory;
 
     /**

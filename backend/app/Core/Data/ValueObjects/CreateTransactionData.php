@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Core\Data\ValueObjects;
 
+use App\Core\Data\ValueObjects\FeeCalculationData;
 use App\Core\Enums\TransactionType;
 
 final readonly class CreateTransactionData
@@ -46,5 +47,16 @@ final readonly class CreateTransactionData
             'amount' => $this->amount,
             'remarks' => $this->remarks,
         ];
+    }
+
+    /**
+     * Convert this DTO into FeeCalculationData.
+     */
+    public function toFeeCalculationData(): FeeCalculationData
+    {
+        return new FeeCalculationData(
+            walletId: $this->walletId,
+            amount: $this->amount,
+        );
     }
 }
