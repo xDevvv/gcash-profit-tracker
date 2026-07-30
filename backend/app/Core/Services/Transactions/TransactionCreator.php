@@ -15,11 +15,13 @@ final class TransactionCreator
         User $user,
         string $referenceNumber,
         float $fee,
+        int $feeRuleId,
     ): Transaction {
         return Transaction::query()->create([
             'reference_number' => $referenceNumber,
             'user_id' => $user->id,
             'wallet_id' => $data->walletId,
+            'fee_rule_id'=> $feeRuleId,
             'transaction_type' => $data->transactionType->value,
             'amount' => $data->amount,
             'fee' => $fee,
