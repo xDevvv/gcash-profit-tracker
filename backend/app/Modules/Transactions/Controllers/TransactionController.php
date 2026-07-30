@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Modules\Transactions\Controllers;
 
+use App\Models\User;
 use App\Models\Transaction;
 use App\Modules\Transactions\Resources\TransactionCollection;
 
@@ -76,7 +77,8 @@ final class TransactionController extends Controller
         $transaction = $this->createTransaction->execute(
             CreateTransactionData::fromArray(
                 $request->validatedData()
-            )
+            ),
+            User::first(),
         );
 
         return (new TransactionResource($transaction))

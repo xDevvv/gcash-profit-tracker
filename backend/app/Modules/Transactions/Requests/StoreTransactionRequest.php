@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Modules\Transactions\Requests;
 
-use App\Core\Enums\Transaction\TransactionType;
+use App\Core\Enums\TransactionType;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
