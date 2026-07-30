@@ -38,17 +38,19 @@ final readonly class CreateTransactionAction
 
             $referenceNumber = $this->referenceGenerator->generate();
 
-            $fee = $this->feeCalculator->calculate( new FeeCalculationData(
+            $feeData = new FeeCalculationData(
                 walletId: $data->walletId,
                 amount: (int) $data->amount,
-            ));
+            );
+
+            $feeRule = $this->feeCalculator->getFeeRule($feeData);
 
             $transaction = $this->transactionCreator->create(
                 data: $data,
                 user: $user,
                 referenceNumber: $referenceNumber,
-                fee: $fee,
-                feeRuleId: 3,
+                fee: $feeRule->fee,
+                feeRuleId: $feeRule->id,
             );
 
             $this->auditLogger->log(

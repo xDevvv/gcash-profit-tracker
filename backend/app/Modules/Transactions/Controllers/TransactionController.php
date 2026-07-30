@@ -43,6 +43,8 @@ final class TransactionController extends Controller
         Request $request,
     ): TransactionCollection {
 
+        // $this->authorize('viewAny', Transaction::class);
+
         $filters = TransactionFilters::fromArray(
             $request->all(),
         );
@@ -62,6 +64,12 @@ final class TransactionController extends Controller
     public function show(
         Transaction $transaction,
     ): TransactionResource {
+
+        // $this->authorize(
+        //     'view',
+        //     $transaction,
+        // );
+
         $transaction->load([
             'user',
             'wallet',
@@ -73,6 +81,11 @@ final class TransactionController extends Controller
     public function store(
         StoreTransactionRequest $request,
     ): JsonResponse {
+
+        // $this->authorize(
+        //     'create',
+        //     Transaction::class,
+        // );
 
         $transaction = $this->createTransaction->execute(
             CreateTransactionData::fromArray(
@@ -94,6 +107,11 @@ final class TransactionController extends Controller
         Transaction $transaction,
     ): TransactionResource {
 
+        // $this->authorize(
+        //     'update',
+        //     $transaction,
+        // );
+
         $transaction = $this->updateTransaction->execute(
             $transaction,
             UpdateTransactionData::fromArray(
@@ -110,6 +128,11 @@ final class TransactionController extends Controller
     public function destroy(
         Transaction $transaction,
     ): Response {
+
+        // $this->authorize(
+        //     'delete',
+        //     $transaction,
+        // );
 
         $this->deleteTransaction->execute($transaction);
 
