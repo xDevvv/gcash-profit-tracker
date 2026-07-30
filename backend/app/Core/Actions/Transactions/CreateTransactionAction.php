@@ -4,15 +4,20 @@ declare(strict_types=1);
 
 namespace App\Core\Actions\Transactions;
 
+use App\Core\Data\ValueObjects\FeeCalculationData;
 use App\Core\Data\ValueObjects\CreateTransactionData;
-use App\Core\Enums\Audit\AuditAction;
-use App\Core\Enums\Audit\AuditModule;
+
+use App\Core\Enums\AuditAction;
+use App\Core\Enums\AuditModule;
+
 use App\Core\Services\Audit\AuditLogger;
 use App\Core\Services\Finance\FeeCalculatorService;
 use App\Core\Services\Transactions\ReferenceNumberGenerator;
 use App\Core\Services\Transactions\TransactionCreator;
+
 use App\Models\Transaction;
 use App\Models\User;
+
 use Illuminate\Support\Facades\DB;
 
 final readonly class CreateTransactionAction
@@ -35,7 +40,7 @@ final readonly class CreateTransactionAction
 
             $fee = $this->feeCalculator->calculate( new FeeCalculationData(
                 walletId: $data->walletId,
-                amount: $data->amount,
+                amount: (int) $data->amount,
             ));
 
             $transaction = $this->transactionCreator->create(
@@ -43,6 +48,7 @@ final readonly class CreateTransactionAction
                 user: $user,
                 referenceNumber: $referenceNumber,
                 fee: $fee,
+                feeRuleId: 3,
             );
 
             $this->auditLogger->log(

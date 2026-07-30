@@ -7,8 +7,8 @@ namespace App\Core\Actions\Transactions;
 
 use App\Core\Data\ValueObjects\FeeCalculationData;
 use App\Core\Data\ValueObjects\UpdateTransactionData;
-use App\Core\Enums\Audit\AuditAction;
-use App\Core\Enums\Audit\AuditModule;
+use App\Core\Enums\AuditAction;
+use App\Core\Enums\AuditModule;
 use App\Core\Services\Audit\AuditLogger;
 use App\Core\Services\Finance\FeeCalculatorService;
 use App\Models\Transaction;
@@ -54,9 +54,10 @@ final readonly class UpdateTransactionAction
             $transaction->update($attributes);
 
             $this->auditLogger->log(
-                AuditAction::UPDATED,
-                AuditModule::TRANSACTION,
-                $transaction,
+                $transaction->user,
+                AuditModule::TRANSACTIONS->value,
+                AuditAction::UPDATED->value,
+                'Updated transaction.',
             );
 
             return $transaction->fresh([
