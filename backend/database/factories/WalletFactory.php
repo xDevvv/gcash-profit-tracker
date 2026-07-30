@@ -48,7 +48,7 @@ class WalletFactory extends Factory
         $wallet = fake()->randomElement(self::DEFAULT_WALLETS);
 
         return [
-            'code' => $wallet['code'],
+            'code' => $this->faker->unique()->slug(1),
             'display_name' => $wallet['display_name'],
             'is_active' => true,
         ];

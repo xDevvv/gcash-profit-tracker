@@ -20,12 +20,17 @@ use Symfony\Component\HttpFoundation\Response;
 use App\Core\Actions\Transactions\UpdateTransactionAction;
 use App\Modules\Transactions\Requests\UpdateTransactionRequest;
 
+use App\Core\Data\ValueObjects\TransactionFilters;
+use App\Core\Services\Transactions\TransactionQueryService;
+use Illuminate\Http\Request;
+
 final class TransactionController extends Controller
 {
     public function __construct(
         private readonly CreateTransactionAction $createTransaction,
         private readonly UpdateTransactionAction $updateTransaction,
         private readonly DeleteTransactionAction $deleteTransaction,
+        private readonly TransactionQueryService $queryService,
     ) {
     }
 
@@ -33,14 +38,22 @@ final class TransactionController extends Controller
     /**
      * Display a paginated list of transactions.
      */
-    public function index(): TransactionCollection
-    {
-        $transactions = Transaction::query()
-            ->latest()
-            ->paginate(15);
+    public function index(
+        Request $request,
+    ): TransactionCollection {
 
-        return new TransactionCollection($transactions);
+        $filters = TransactionFilters::fromArray(
+            $request->all(),
+        );
+
+        $transactions = $this->queryService
+            ->paginate($filters);
+
+        return new TransactionCollection(
+            $transactions,
+        );
     }
+
 
     /**
      * Display the specified transaction.
