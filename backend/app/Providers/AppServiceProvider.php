@@ -9,9 +9,11 @@ use Illuminate\Support\ServiceProvider;
 
 use App\Models\Transaction;
 use App\Models\Wallet;
+use App\Models\FeeRule;
 
 use App\Modules\Transactions\Policies\TransactionPolicy;
 use App\Modules\Wallets\Policies\WalletPolicy;
+use App\Modules\FeeRules\Policies\FeeRulePolicy;
 
 final class AppServiceProvider extends ServiceProvider
 {
@@ -36,6 +38,11 @@ final class AppServiceProvider extends ServiceProvider
         Gate::policy(
             Wallet::class,
             WalletPolicy::class,
+        );
+
+        Gate::policy(
+            FeeRule::class,
+            FeeRulePolicy::class,
         );
     }
 }

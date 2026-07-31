@@ -6,7 +6,7 @@ require base_path('app/Modules/Transactions/Routes/api.php');
 
 require base_path('app/Modules/Wallets/Routes/api.php');
 
-// require base_path('app/Modules/FeeRules/Routes/api.php');
+require base_path('app/Modules/FeeRules/Routes/api.php');
 
 // require base_path('app/Modules/Reports/Routes/api.php');
 

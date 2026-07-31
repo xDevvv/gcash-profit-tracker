@@ -23,4 +23,6 @@ enum AuditModule: string
     case SETTINGS = 'Settings';
 
     case FEE_MANAGEMENT = 'Fee Management';
+
+    case FEE_RULES = 'Fee Rules';
 }

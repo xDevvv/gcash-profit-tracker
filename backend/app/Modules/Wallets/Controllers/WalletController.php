@@ -77,8 +77,7 @@ final class WalletController extends Controller
                 $request->validatedData(),
             ),
 
-            User::first() // TODO (Phase 7): Replace with $request->user() after implementing authentication.
-            
+            $user,            
         );
 
         return (new WalletResource($wallet))
@@ -106,12 +105,13 @@ final class WalletController extends Controller
         Wallet $wallet,
     ): WalletResource {
 
+        $user = User::firstOrFail();
         $wallet = $this->updateWallet->execute(
             $wallet,
             UpdateWalletData::fromArray(
                 $request->validatedData(),
             ),
-            User::first(), // TODO (Phase 7): Replace with $request->user() after implementing authentication.
+            $user, 
         );
 
         return new WalletResource(
@@ -125,10 +125,10 @@ final class WalletController extends Controller
     public function destroy(
         Wallet $wallet,
     ): Response {
-
+        $user = User::firstOrFail();
         $this->deleteWallet->execute(
             $wallet,
-            User::first() // TODO (Phase 7): Replace with $request->user() after implementing authentication.
+            $user, // TODO (Phase 7): Replace with $request->user() after implementing authentication.
         );
 
         return response()->noContent();

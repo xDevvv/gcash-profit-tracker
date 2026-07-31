@@ -43,6 +43,17 @@ final class FeeCalculatorService
      */
     public function calculate( FeeCalculationData $data ): int
     {
-        return $this->getFeeRule($data)->fee;
+        $rule = $this->engine->resolve(
+            $data->walletId,
+            $data->amount,
+        );
+
+        if ($rule === null) {
+            throw FeeRuleNotFoundException::forAmount(
+                $data->amount
+            );
+        }
+
+        return $rule->fee;
     }
 }
