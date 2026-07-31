@@ -10,6 +10,8 @@ enum AuditModule: string
 
     case TRANSACTIONS = 'Transactions';
 
+    case WALLETS = 'Wallets';
+
     case DASHBOARD = 'Dashboard';
 
     case USERS = 'Users';
