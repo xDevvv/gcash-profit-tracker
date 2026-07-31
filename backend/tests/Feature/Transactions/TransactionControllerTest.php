@@ -182,4 +182,142 @@ final class TransactionControllerTest extends TestCase
             'id' => $transaction->id,
         ]);
     }
+
+    #[Test]
+    public function it_validates_required_wallet_id(): void
+    {
+        $payload = [
+            'amount' => 100,
+            'transaction_type' => 'cash_in',
+            'remarks' => 'Validation Test',
+        ];
+
+        $response = $this->postJson(
+            '/api/transactions',
+            $payload,
+        );
+
+        $response
+            ->assertStatus(422)
+            ->assertJsonValidationErrors([
+                'wallet_id',
+            ]);
+    }
+
+    #[Test]
+    public function it_validates_required_amount(): void
+    {
+        $wallet = Wallet::factory()->create();
+
+        $payload = [
+            'wallet_id' => $wallet->id,
+            'transaction_type' => 'cash_in',
+            'remarks' => 'Validation Test',
+        ];
+
+        $response = $this->postJson(
+            '/api/transactions',
+            $payload,
+        );
+
+        $response
+            ->assertStatus(422)
+            ->assertJsonValidationErrors([
+                'amount',
+            ]);
+    }
+
+    #[Test]
+    public function it_validates_transaction_type(): void
+    {
+        $wallet = Wallet::factory()->create();
+
+        $payload = [
+            'wallet_id' => $wallet->id,
+            'amount' => 100,
+            'transaction_type' => 'invalid_type',
+            'remarks' => 'Validation Test',
+        ];
+
+        $response = $this->postJson(
+            '/api/transactions',
+            $payload,
+        );
+
+        $response
+            ->assertStatus(422)
+            ->assertJsonValidationErrors([
+                'transaction_type',
+            ]);
+    }
+
+    #[Test]
+    public function it_validates_positive_amount(): void
+    {
+        $wallet = Wallet::factory()->create();
+
+        $payload = [
+            'wallet_id' => $wallet->id,
+            'amount' => 0,
+            'transaction_type' => 'cash_in',
+            'remarks' => 'Validation Test',
+        ];
+
+        $response = $this->postJson(
+            '/api/transactions',
+            $payload,
+        );
+
+        $response
+            ->assertStatus(422)
+            ->assertJsonValidationErrors([
+                'amount',
+            ]);
+    }
+
+    #[Test]
+    public function it_paginates_transactions(): void
+    {
+        Transaction::factory()->count(20)->create();
+
+        $response = $this->getJson('/api/transactions');
+
+        $response
+            ->assertOk()
+            ->assertJsonCount(15, 'data')
+            ->assertJsonStructure([
+                'data',
+                'links',
+                'meta',
+            ]);
+    }
+
+    #[Test]
+    public function it_respects_per_page_parameter(): void
+    {
+        Transaction::factory()->count(20)->create();
+
+        $response = $this->getJson(
+            '/api/transactions?per_page=5'
+        );
+
+        $response
+            ->assertOk()
+            ->assertJsonCount(5, 'data');
+    }
+
+    #[Test]
+    public function it_returns_second_page(): void
+    {
+        Transaction::factory()->count(20)->create();
+
+        $response = $this->getJson(
+            '/api/transactions?page=2&per_page=5'
+        );
+
+        $response
+            ->assertOk()
+            ->assertJsonCount(5, 'data')
+            ->assertJsonPath('meta.current_page', 2);
+    }
 }

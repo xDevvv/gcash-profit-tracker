@@ -216,4 +216,134 @@ final class TransactionQueryService
             $direction,
         );
     }
+
+    #[Test]
+    public function it_filters_transactions_by_wallet(): void
+    {
+        $user = User::factory()->create();
+
+        $walletA = Wallet::factory()->create();
+        $walletB = Wallet::factory()->create();
+
+        $feeRuleA = FeeRule::factory()->create([
+            'wallet_id' => $walletA->id,
+            'minimum_amount' => 0,
+            'maximum_amount' => 1000,
+            'fee' => 3,
+            'is_active' => true,
+        ]);
+
+        $feeRuleB = FeeRule::factory()->create([
+            'wallet_id' => $walletB->id,
+            'minimum_amount' => 0,
+            'maximum_amount' => 1000,
+            'fee' => 3,
+            'is_active' => true,
+        ]);
+
+        Transaction::factory()->create([
+            'user_id' => $user->id,
+            'wallet_id' => $walletA->id,
+            'fee_rule_id' => $feeRuleA->id,
+        ]);
+
+        Transaction::factory()->create([
+            'user_id' => $user->id,
+            'wallet_id' => $walletB->id,
+            'fee_rule_id' => $feeRuleB->id,
+        ]);
+
+        $response = $this->getJson(
+            "/api/transactions?wallet_id={$walletA->id}"
+        );
+
+        $response
+            ->assertOk()
+            ->assertJsonCount(1, 'data')
+            ->assertJsonFragment([
+                'wallet_id' => $walletA->id,
+            ]);
+    }
+
+    #[Test]
+    public function it_filters_transactions_by_transaction_type(): void
+    {
+        $user = User::factory()->create();
+        $wallet = Wallet::factory()->create();
+
+        $feeRule = FeeRule::factory()->create([
+            'wallet_id' => $wallet->id,
+            'minimum_amount' => 0,
+            'maximum_amount' => 1000,
+            'fee' => 3,
+            'is_active' => true,
+        ]);
+
+        Transaction::factory()->create([
+            'user_id' => $user->id,
+            'wallet_id' => $wallet->id,
+            'fee_rule_id' => $feeRule->id,
+            'transaction_type' => 'cash_in',
+        ]);
+
+        Transaction::factory()->create([
+            'user_id' => $user->id,
+            'wallet_id' => $wallet->id,
+            'fee_rule_id' => $feeRule->id,
+            'transaction_type' => 'cash_out',
+        ]);
+
+        $response = $this->getJson(
+            '/api/transactions?transaction_type=cash_in'
+        );
+
+        $response
+            ->assertOk()
+            ->assertJsonCount(1, 'data')
+            ->assertJsonFragment([
+                'transaction_type' => 'cash_in',
+            ]);
+    }
+
+
+    #[Test]
+    public function it_searches_transactions(): void
+    {
+        $user = User::factory()->create();
+
+        $wallet = Wallet::factory()->create();
+
+        $feeRule = FeeRule::factory()->create([
+            'wallet_id' => $wallet->id,
+            'minimum_amount' => 0,
+            'maximum_amount' => 1000,
+            'fee' => 3,
+            'is_active' => true,
+        ]);
+
+        Transaction::factory()->create([
+            'user_id' => $user->id,
+            'wallet_id' => $wallet->id,
+            'fee_rule_id' => $feeRule->id,
+            'remarks' => 'GCash payment',
+        ]);
+
+        Transaction::factory()->create([
+            'user_id' => $user->id,
+            'wallet_id' => $wallet->id,
+            'fee_rule_id' => $feeRule->id,
+            'remarks' => 'Maya payment',
+        ]);
+
+        $response = $this->getJson(
+            '/api/transactions?search=GCash'
+        );
+
+        $response
+            ->assertOk()
+            ->assertJsonCount(1, 'data')
+            ->assertJsonFragment([
+                'remarks' => 'GCash payment',
+            ]);
+    }
 }

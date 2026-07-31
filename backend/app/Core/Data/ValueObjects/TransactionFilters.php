@@ -37,7 +37,9 @@ final readonly class TransactionFilters
                 ? (int) $data['user_id']
                 : null,
 
-            transactionType: $data['transaction_type'] ?? null,
+            transactionType: isset($data['transaction_type'])
+            ? TransactionType::from($data['transaction_type'])
+            : null,
 
             status: $data['status'] ?? null,
 
