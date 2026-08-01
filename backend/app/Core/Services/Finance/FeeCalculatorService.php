@@ -8,30 +8,28 @@ use App\Models\FeeRule;
 use App\Core\Exceptions\Finance\FeeRuleNotFoundException;
 use App\Core\Data\ValueObjects\FeeCalculationData;
 
-use Illuminate\Database\Eloquent\ModelNotFoundException;
-
-final class FeeCalculatorService
+final readonly class FeeCalculatorService
 {
+    public function __construct(
+        private FeeRuleEngine $engine,
+    ) {
+    }
+
     /**
      * Get the matching fee rule.
-     *
-     * @throws ModelNotFoundException
      */
     public function getFeeRule(
         FeeCalculationData $data,
-    ): FeeRule
-    {
-        $rule = FeeRule::query()
-            ->active()
-            ->forWallet($data->walletId)
-            ->forAmount($data->amount)
-            ->effectiveOn(now())
-            ->ordered()
-            ->first();
+    ): FeeRule {
+
+        $rule = $this->engine->resolve(
+            $data->walletId,
+            $data->amount,
+        );
 
         if ($rule === null) {
             throw FeeRuleNotFoundException::forAmount(
-                $data->amount
+                $data->amount,
             );
         }
 
@@ -41,19 +39,12 @@ final class FeeCalculatorService
     /**
      * Calculate the fee.
      */
-    public function calculate( FeeCalculationData $data ): int
-    {
-        $rule = $this->engine->resolve(
-            $data->walletId,
-            $data->amount,
-        );
+    public function calculate(
+        FeeCalculationData $data,
+    ): int {
 
-        if ($rule === null) {
-            throw FeeRuleNotFoundException::forAmount(
-                $data->amount
-            );
-        }
-
-        return $rule->fee;
+        return $this
+            ->getFeeRule($data)
+            ->fee;
     }
 }
